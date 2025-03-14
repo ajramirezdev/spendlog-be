@@ -18,7 +18,6 @@ export const registerUser = async (req: Request, res: Response) => {
     const newUser = await user.save();
     res.status(201).json(newUser);
   } catch (error) {
-    console.log(error);
     res.sendStatus(400);
   }
 };
@@ -28,7 +27,6 @@ export const getAllUsers = async (req: Request, res: Response) => {
     const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
-    console.log(error);
     res.sendStatus(400);
   }
 };
