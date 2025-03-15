@@ -1,5 +1,7 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
+import { verifyPassword } from "../utils/helpers";
+
 import User from "../model/user.model";
 
 passport.serializeUser((user, done) => {
@@ -12,7 +14,7 @@ passport.deserializeUser(async (_id, done) => {
     if (!user) throw new Error("User not found.");
     done(null, user);
   } catch (error) {
-    done(error, undefined);
+    done(error, false);
   }
 });
 
@@ -21,10 +23,12 @@ export default passport.use(
     try {
       const user = await User.findOne({ email });
       if (!user) throw new Error("User not found.");
-      if (password !== user.password) throw new Error("Wrong Password.");
+      if (!verifyPassword(password, user.password))
+        throw new Error("Wrong Password.");
+
       done(null, user);
     } catch (error) {
-      done(error, undefined);
+      done(error, false);
     }
   })
 );

@@ -6,7 +6,6 @@ import session from "express-session";
 import passport from "passport";
 
 import connectToDB from "./config/db";
-import UserRoutes from "./routes/user.route";
 import AuthRoutes from "./routes/auth.route";
 
 const app = express();
@@ -29,7 +28,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api/users", UserRoutes);
 app.use("/api/auth", AuthRoutes);
 
 app.get("/", (req, res) => {
