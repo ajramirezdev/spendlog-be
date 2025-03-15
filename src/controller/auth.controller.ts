@@ -4,7 +4,7 @@ import { hashPassword } from "../utils/helpers";
 
 import User from "../model/user.model";
 
-export const login = async (req: Request, res: Response) => {
+export const login = (req: Request, res: Response) => {
   if (!req.user || !req.user.id) {
     res.sendStatus(401);
     return;
@@ -36,9 +36,7 @@ export const signup = async (req: Request, res: Response) => {
 
   try {
     const validatedData = matchedData(req);
-    console.log(validatedData);
     validatedData.password = hashPassword(validatedData.password);
-    console.log(validatedData);
 
     const user = new User(validatedData);
     const newUser = await user.save();
@@ -53,4 +51,13 @@ export const signup = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({ error: "User creation failed." });
   }
+};
+
+export const getStatus = (req: Request, res: Response) => {
+  if (!req.user || !req.user.id) {
+    res.sendStatus(401);
+    return;
+  }
+
+  res.status(200).json(req.user);
 };

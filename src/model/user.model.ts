@@ -25,6 +25,7 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+// exclude password from response
 userSchema.set("toJSON", {
   transform: (doc, ret) => {
     delete ret.password;

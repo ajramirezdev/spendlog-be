@@ -5,7 +5,9 @@ import express from "express";
 import session from "express-session";
 import passport from "passport";
 
-import connectToDB from "./config/db";
+import { connectToDB, mongooseConnection } from "./config/db";
+import MongoStore from "connect-mongo";
+
 import AuthRoutes from "./routes/auth.route";
 
 const app = express();
@@ -22,6 +24,9 @@ app.use(
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // expires in 1 day
     },
+    store: MongoStore.create({
+      client: mongooseConnection.getClient(),
+    }),
   })
 );
 

@@ -52,12 +52,12 @@ const userValidatorSchema = {
       options: { min: 8 },
       errorMessage: "Password must be at least 8 characters long.",
     },
-    // matches: {
-    //   options:
-    //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-    //   errorMessage:
-    //     "Password must include at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.",
-    // },
+    matches: {
+      options:
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+      errorMessage:
+        "Password must include at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.",
+    },
   },
 };
 
