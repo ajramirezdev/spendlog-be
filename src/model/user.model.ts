@@ -19,7 +19,15 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
+      required: function (this: any) {
+        return this.provider === "local";
+      },
+    },
+    provider: {
+      type: String,
       required: true,
+      default: "local",
+      enum: ["local", "google"],
     },
   },
   { timestamps: true }
