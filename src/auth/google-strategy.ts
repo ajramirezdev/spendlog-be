@@ -4,7 +4,7 @@ dotenv.config();
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
 
-import User from "../model/user.model";
+import User from "../models/user.model";
 
 passport.serializeUser((user, done) => {
   return done(null, user.id);

@@ -9,6 +9,8 @@ import { connectToDB, mongooseConnection } from "./config/db";
 import MongoStore from "connect-mongo";
 
 import AuthRoutes from "./routes/auth.route";
+import UserRoutes from "./routes/user.route";
+import ExpenseRoutes from "./routes/expense.route";
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -34,6 +36,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/api/auth", AuthRoutes);
+app.use("/api/users", UserRoutes);
+app.use("/api/expenses", ExpenseRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to SpendLog BE!");

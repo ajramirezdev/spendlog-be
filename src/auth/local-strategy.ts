@@ -2,7 +2,7 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import { verifyPassword } from "../utils/helpers";
 
-import User from "../model/user.model";
+import User from "../models/user.model";
 
 passport.serializeUser((user, done) => {
   return done(null, user.id);

@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../utils/helpers";
 
-import User from "../model/user.model";
+import User from "../models/user.model";
 
 export const login = (req: Request, res: Response) => {
-  if (!req.isAuthenticated) {
+  if (!req.isAuthenticated()) {
     res.sendStatus(401);
     return;
   }
@@ -14,7 +14,7 @@ export const login = (req: Request, res: Response) => {
 };
 
 export const logout = (req: Request, res: Response) => {
-  if (!req.isAuthenticated) {
+  if (!req.isAuthenticated()) {
     res.sendStatus(401);
     return;
   }
@@ -55,7 +55,7 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const getStatus = (req: Request, res: Response) => {
-  if (!req.isAuthenticated) {
+  if (!req.isAuthenticated()) {
     res.sendStatus(401);
     return;
   }
