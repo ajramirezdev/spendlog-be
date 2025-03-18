@@ -5,20 +5,10 @@ import { hashPassword } from "../utils/helpers";
 import User from "../models/user.model";
 
 export const login = (req: Request, res: Response) => {
-  if (!req.isAuthenticated()) {
-    res.sendStatus(401);
-    return;
-  }
-
   res.status(200).json(req.user);
 };
 
 export const logout = (req: Request, res: Response) => {
-  if (!req.isAuthenticated()) {
-    res.sendStatus(401);
-    return;
-  }
-
   req.logOut((error) => {
     if (error) {
       res.sendStatus(500);
@@ -55,10 +45,5 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 export const getStatus = (req: Request, res: Response) => {
-  if (!req.isAuthenticated()) {
-    res.sendStatus(401);
-    return;
-  }
-
   res.status(200).json(req.user);
 };
