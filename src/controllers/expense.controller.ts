@@ -1,8 +1,13 @@
 import { Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
+import mongoose from "mongoose";
+
+import { buildAggregation } from "../utils/expense.helpers";
+
+import Expense from "../models/expense.model";
 
 import { PaginationRequest } from "../types/requestTypes";
-import Expense from "../models/expense.model";
+import { ExpensePeriod } from "../types/expenses";
 
 export const createExpense = async (req: Request, res: Response) => {
   const errors = validationResult(req);
@@ -31,10 +36,39 @@ export const createExpense = async (req: Request, res: Response) => {
 export const deleteExpense = async (req: Request, res: Response) => {
   try {
     const expenseId = req.params.id;
+
     await Expense.deleteOne({ _id: expenseId });
+
     res.sendStatus(200);
   } catch (error) {
     res.status(500).json({ message: "Failed to delete expense." });
+  }
+};
+
+export const editExpense = async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    res.status(400).json({ errors: errors.array() });
+    return;
+  }
+
+  try {
+    const validatedData = matchedData(req);
+    console.log(validatedData);
+
+    const expenseId = req.params.id;
+    const userId = req.user?.id;
+
+    const updatedExpense = await Expense.findByIdAndUpdate(
+      expenseId,
+      { $set: { ...validatedData, user: userId } },
+      { new: true }
+    );
+
+    res.status(200).json(updatedExpense);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update expense." });
   }
 };
 
@@ -65,6 +99,22 @@ export const getUserExpenses = async (
       currentPage: page,
       perPage: limit,
     });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to get user expenses." });
+  }
+};
+
+export const getUserExpensesByPeriod = async (req: Request, res: Response) => {
+  try {
+    const period = req.params.period;
+    const aggregationPipeline = buildAggregation(period as ExpensePeriod);
+
+    const expenses = await Expense.aggregate([
+      { $match: { user: new mongoose.Types.ObjectId(req.user?.id) } },
+      ...aggregationPipeline,
+    ]);
+
+    res.status(200).json(expenses);
   } catch (error) {
     res.status(500).json({ message: "Failed to get user expenses." });
   }

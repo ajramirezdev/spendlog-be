@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { verifyPassword } from "../utils/helpers";
+import { verifyPassword } from "../utils/auth.helpers";
 
 import User from "../models/user.model";
 

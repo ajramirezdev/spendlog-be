@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
-import { hashPassword } from "../utils/helpers";
+import { hashPassword } from "../utils/auth.helpers";
 
 import User from "../models/user.model";
 

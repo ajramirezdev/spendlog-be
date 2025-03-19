@@ -1,28 +1,43 @@
 import express, { Router } from "express";
 
 import {
+  createExpense,
+  deleteExpense,
+  editExpense,
+  getUserExpenses,
+  getUserExpensesByPeriod,
+} from "../controllers/expense.controller";
+import {
   authenticateUser,
   authorizeUserByExpense,
   authorizeUserById,
-  paginate,
-} from "../utils/helpers";
-import {
-  createExpense,
-  deleteExpense,
-  getUserExpenses,
-} from "../controllers/expense.controller";
+} from "../middlewares/auth.middleware";
+import { paginate } from "../middlewares/pagination.middleware";
 import validateExpense from "../validators/expense.validator";
 
 const router: Router = express.Router();
 
 router.post("/", authenticateUser, validateExpense, createExpense);
 router.delete("/:id", authenticateUser, authorizeUserByExpense, deleteExpense);
+router.put(
+  "/:id",
+  authenticateUser,
+  authorizeUserByExpense,
+  validateExpense,
+  editExpense
+);
 router.get(
   "/user/:id",
   authenticateUser,
   authorizeUserById,
   paginate,
   getUserExpenses
+);
+router.get(
+  "/user/:id/:period",
+  authenticateUser,
+  authorizeUserById,
+  getUserExpensesByPeriod
 );
 
 export default router;

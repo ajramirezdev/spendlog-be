@@ -7,7 +7,7 @@ import {
   signup,
 } from "../controllers/auth.controller";
 import validateUser from "../validators/user.validator";
-import { authenticateUser } from "../utils/helpers";
+import { authenticateUser } from "../middlewares/auth.middleware";
 
 import "../auth/local-strategy";
 import "../auth/google-strategy";
