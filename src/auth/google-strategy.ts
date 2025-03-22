@@ -1,26 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import passport from "passport";
+import passport from "../config/passport/index";
 import { Strategy } from "passport-google-oauth20";
 
 import User from "../models/user.model";
-
-passport.serializeUser((user, done) => {
-  return done(null, user.id);
-});
-
-passport.deserializeUser(async (_id, done) => {
-  try {
-    const user = await User.findOne({ _id });
-    if (!user) {
-      return done(null, false);
-    }
-    return done(null, user);
-  } catch (error) {
-    return done(error);
-  }
-});
 
 export default passport.use(
   new Strategy(

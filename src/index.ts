@@ -4,6 +4,7 @@ dotenv.config();
 import express from "express";
 import session from "express-session";
 import passport from "passport";
+import cors from "cors";
 
 import { connectToDB, mongooseConnection } from "./config/db";
 import MongoStore from "connect-mongo";
@@ -16,6 +17,13 @@ const PORT = process.env.PORT ?? 3000;
 
 connectToDB();
 
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(
   session({
@@ -24,6 +32,9 @@ app.use(
     resave: false,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // expires in 1 day
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
     },
     store: MongoStore.create({
       client: mongooseConnection.getClient(),

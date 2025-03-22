@@ -5,7 +5,7 @@ import { hashPassword } from "../utils/auth.helpers";
 import User from "../models/user.model";
 
 export const login = (req: Request, res: Response) => {
-  res.status(200).json(req.user);
+  res.sendStatus(200);
 };
 
 export const logout = (req: Request, res: Response) => {
@@ -37,13 +37,17 @@ export const signup = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Login failed after signup." });
         return;
       }
-      res.status(201).json(newUser);
+      res.sendStatus(201);
     });
   } catch (error) {
     res.status(500).json({ error: "User creation failed." });
   }
 };
 
-export const getStatus = (req: Request, res: Response) => {
+export const getCurrentUser = (req: Request, res: Response) => {
   res.status(200).json(req.user);
+};
+
+export const redirectToHomepage = (req: Request, res: Response) => {
+  res.redirect("http://localhost:3001/");
 };
