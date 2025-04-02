@@ -29,6 +29,10 @@ const userSchema = new Schema(
       default: "local",
       enum: ["local", "google"],
     },
+    image: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );

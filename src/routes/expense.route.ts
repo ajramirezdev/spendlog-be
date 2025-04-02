@@ -4,6 +4,7 @@ import {
   createExpense,
   deleteExpense,
   editExpense,
+  getExpenseSummary,
   getUserExpenses,
   getUserExpensesByPeriod,
 } from "../controllers/expense.controller";
@@ -38,6 +39,12 @@ router.get(
   authenticateUser,
   authorizeUserById,
   getUserExpensesByPeriod
+);
+router.get(
+  "/summary/user/:id",
+  authenticateUser,
+  authorizeUserById,
+  getExpenseSummary
 );
 
 export default router;

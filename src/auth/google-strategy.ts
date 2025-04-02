@@ -16,7 +16,7 @@ export default passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const { given_name, family_name, email } = profile._json;
+        const { given_name, family_name, email, picture } = profile._json;
         let user = await User.findOne({ email });
 
         if (!user) {
@@ -24,6 +24,7 @@ export default passport.use(
             firstName: given_name,
             lastName: family_name,
             email,
+            image: picture,
             provider: "google",
           });
           user = await user.save();

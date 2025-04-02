@@ -1,8 +1,12 @@
+import mongoose from "mongoose";
 import { Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
-import mongoose from "mongoose";
 
-import { buildAggregation } from "../utils/expense.helpers";
+import {
+  buildAggregation,
+  calculateDifference,
+  expensesOverview,
+} from "../utils/expense.helpers";
 
 import Expense from "../models/expense.model";
 
@@ -55,7 +59,6 @@ export const editExpense = async (req: Request, res: Response) => {
 
   try {
     const validatedData = matchedData(req);
-    console.log(validatedData);
 
     const expenseId = req.params.id;
     const userId = req.user?.id;
@@ -117,5 +120,39 @@ export const getUserExpensesByPeriod = async (req: Request, res: Response) => {
     res.status(200).json(expenses);
   } catch (error) {
     res.status(500).json({ message: "Failed to get user expenses." });
+  }
+};
+
+export const getExpenseSummary = async (req: Request, res: Response) => {
+  try {
+    const userId = new mongoose.Types.ObjectId(req.user?.id);
+    const [results] = await Expense.aggregate(expensesOverview(userId));
+
+    res.json({
+      totalExpenses: results.totalExpenses[0]?.total || 0,
+      monthlyExpenses: {
+        amount: results.monthlyExpenses[0]?.total || 0,
+        ...calculateDifference(
+          results.monthlyExpenses[0]?.total || 0,
+          results.lastMonthExpenses[0]?.total || 0
+        ),
+      },
+      weeklyExpenses: {
+        amount: results.weeklyExpenses[0]?.total || 0,
+        ...calculateDifference(
+          results.weeklyExpenses[0]?.total || 0,
+          results.lastWeekExpenses[0]?.total || 0
+        ),
+      },
+      dailyExpenses: {
+        amount: results.dailyExpenses[0]?.total || 0,
+        ...calculateDifference(
+          results.dailyExpenses[0]?.total || 0,
+          results.yesterdayExpenses[0]?.total || 0
+        ),
+      },
+    });
+  } catch (error) {
+    res.sendStatus(500);
   }
 };
