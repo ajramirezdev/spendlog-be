@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { Request, Response } from "express";
 import { matchedData, validationResult } from "express-validator";
 import { hashPassword } from "../utils/auth.helpers";
@@ -49,5 +52,5 @@ export const getCurrentUser = (req: Request, res: Response) => {
 };
 
 export const redirectToHomepage = (req: Request, res: Response) => {
-  res.redirect("http://localhost:3001/");
+  res.redirect(process.env.FRONTEND_URL ?? "");
 };
