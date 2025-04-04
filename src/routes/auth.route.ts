@@ -12,6 +12,8 @@ import { authenticateUser } from "../middlewares/auth.middleware";
 
 import "../auth/local-strategy";
 import "../auth/google-strategy";
+import "../auth/discord-strategy";
+import "../auth/github-strategy";
 
 const router: Router = express.Router();
 
@@ -23,6 +25,22 @@ router.get("/google", passport.authenticate("google"));
 router.get(
   "/google/callback",
   passport.authenticate("google"),
+  authenticateUser,
+  redirectToHomepage
+);
+
+router.get("/discord", passport.authenticate("discord"));
+router.get(
+  "/discord/callback",
+  passport.authenticate("discord"),
+  authenticateUser,
+  redirectToHomepage
+);
+
+router.get("/github", passport.authenticate("github"));
+router.get(
+  "/github/callback",
+  passport.authenticate("github", { failureMessage: true }),
   authenticateUser,
   redirectToHomepage
 );

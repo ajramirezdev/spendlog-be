@@ -27,7 +27,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       default: "local",
-      enum: ["local", "google"],
+      enum: ["local", "google", "discord", "github"],
     },
     image: {
       type: String,
